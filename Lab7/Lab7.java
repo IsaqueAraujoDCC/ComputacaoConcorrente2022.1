@@ -5,7 +5,7 @@ class Contador {
         this.contador = 0;
     }
 
-    public void inc(){
+    synchronized public void inc(){
         this.contador++;
     }
 
@@ -35,8 +35,8 @@ class T implements Runnable{
 }
 
 class Lab7{
-    static final int N = 3;
-    static final int[] numeros = {1, 2, 3, 1, 1, 1, 6,1, 4};
+    static final int N = 2;
+    static final int[] numeros = {2, 13, 14, 32, 8, 16, 7, 10};
     
     public static void main(String[] args){
         Thread[] threads = new Thread[N];
