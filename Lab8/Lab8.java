@@ -1,12 +1,10 @@
 class LE {
   private int leit, escr;
-  private int incrementada;  
   
   // Construtor
   LE() { 
      this.leit = 0; //leitores lendo (0 ou mais)
      this.escr = 0; //escritor escrevendo (0 ou 1)
-     this.incrementada = 0;
   } 
   
   // Entrada para leitores
@@ -50,17 +48,10 @@ class LE {
      System.out.println ("le.escritorSaindo("+id+")");
   }
 
-  public synchronized void incrementa(){
-    this.incrementada++;
-  }
+}
 
-  public synchronized int getIncrementadada(){
-    return this.incrementada;
-  }
-
-  public synchronized void setIdentificador(int id){
-    this.incrementada = id;
-  }
+class Global{
+    static int global = 0;
 }
 
 class T1 extends Thread {
@@ -80,7 +71,7 @@ class T1 extends Thread {
     try {
       for (;;) {
         this.monitor.EntraEscritor(this.id); 
-        this.monitor.incrementa();
+        Global.global++;
         this.monitor.SaiEscritor(this.id); 
         sleep(this.delay); //atraso bobo...
       }
@@ -92,7 +83,6 @@ class T2 extends Thread {
   int id; //identificador da thread
   int delay; //atraso bobo
   LE monitor;//objeto monitor para coordenar a lógica de execução das threads
-
   // Construtor
   T2 (int id, int delayTime, LE m) {
     this.id = id;
@@ -105,8 +95,8 @@ class T2 extends Thread {
     try {
       for (;;) {
         this.monitor.EntraLeitor(this.id);
-        System.out.println(this.monitor.getIncrementadada());
-        if(this.monitor.getIncrementadada()%2 == 0)
+        System.out.println(Global.global);
+        if(Global.global%2 == 0)
             System.out.println("É par!");
         else
             System.out.println("É impar!");
@@ -121,7 +111,6 @@ class T3 extends Thread {
   int id; //identificador da thread
   int delay; //atraso bobo...
   LE monitor; //objeto monitor para coordenar a lógica de execução das threads
-
   // Construtor
   T3 (int id, int delayTime, LE m) {
     this.id = id;
@@ -135,11 +124,11 @@ class T3 extends Thread {
     try {
       for (;;) {
         this.monitor.EntraLeitor(this.id);
-        System.out.println(this.monitor.getIncrementadada());
+        System.out.println(Global.global);
         for (i=0; i<100000000; i++) {j=j/2;} //...loop bobo para simbolizar o tempo de leitura
         this.monitor.SaiLeitor(this.id);
         this.monitor.EntraEscritor(this.id); 
-        this.monitor.setIdentificador(this.id);
+        Global.global = this.id;
         this.monitor.SaiEscritor(this.id); 
         sleep(this.delay); 
       }
