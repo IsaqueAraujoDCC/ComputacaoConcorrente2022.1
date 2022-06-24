@@ -50,8 +50,22 @@ class LE {
 
 }
 
+//Class para controlar a variável global
 class Global{
     static int global = 0;
+    
+    public static void incrementa(){
+      global++;
+    }
+
+    public static void setIdentificador(int n) {
+		  System.out.println("#Valor atual: " + global);
+		  global = n;
+	  }
+
+    public static void ehPar() {
+		  System.out.printf("#" + "%d É %s\n", global, global % 2 == 0 ? "par!" : "impar!");
+	}
 }
 
 class T1 extends Thread {
@@ -70,8 +84,9 @@ class T1 extends Thread {
   public void run () {
     try {
       for (;;) {
-        this.monitor.EntraEscritor(this.id); 
-        Global.global++;
+        this.monitor.EntraEscritor(this.id);
+        //Global.global++; 
+        Global.incrementa();
         this.monitor.SaiEscritor(this.id); 
         sleep(this.delay); //atraso bobo...
       }
@@ -95,11 +110,12 @@ class T2 extends Thread {
     try {
       for (;;) {
         this.monitor.EntraLeitor(this.id);
-        System.out.println(Global.global);
+        /*System.out.println(Global.global);
         if(Global.global%2 == 0)
             System.out.println("É par!");
         else
-            System.out.println("É impar!");
+            System.out.println("É impar!");*/
+        Global.ehPar();    
         this.monitor.SaiLeitor(this.id);
         sleep(this.delay); 
       }
@@ -124,11 +140,12 @@ class T3 extends Thread {
     try {
       for (;;) {
         this.monitor.EntraLeitor(this.id);
-        System.out.println(Global.global);
+        System.out.println("#Valor atual: " + Global.global);
         for (i=0; i<100000000; i++) {j=j/2;} //...loop bobo para simbolizar o tempo de leitura
         this.monitor.SaiLeitor(this.id);
         this.monitor.EntraEscritor(this.id); 
-        Global.global = this.id;
+        //Global.global = this.id;
+        Global.setIdentificador(this.id);
         this.monitor.SaiEscritor(this.id); 
         sleep(this.delay); 
       }
@@ -149,8 +166,8 @@ class Lab8 {
     T3[] le = new T3[LE];   // Threads leitoras e escritoras
 
     //inicia o log de saida
-    //System.out.println ("import verificaLE");
-    //System.out.println ("le = verificaLE.LE()");
+    System.out.println ("import verificaLE");
+    System.out.println ("le = verificaLE.LE()");
     
     for (i=0; i<L; i++) {
        l[i] = new T1(i+1, (i+1)*500, monitor);
