@@ -3,11 +3,11 @@
 #include <stdlib.h>
 #include <semaphore.h>
 
-//gcc lab5.c -o lab5 -Wall -lpthread
+//gcc lab9.c -o lab9 -Wall -lpthread
 
 #define NTHREADS  5
 int x = 0;
-sem_t condt2, condt3;
+sem_t condt2, condt3, excluMut;
 
 /* Thread A */
 void *A (void *t) {
@@ -15,50 +15,51 @@ void *A (void *t) {
   /* faz alguma coisa pra gastar tempo... */
   boba1=10000; boba2=-10000; while (boba2 < boba1) boba2++;
   printf("Seja bem-vindo!\n");
-    x++;
+  x++;
+  sem_post(&condt2);
+  sem_post(&condt2);
   sem_post(&condt2);
   pthread_exit(NULL);
 }
 
 /* Thread B */
 void *B (void *t) {
-  if(x == 0)
   sem_wait(&condt2);
   printf("Fique a vontade.\n");
-    x++;
+  sem_wait(&excluMut);
+  x++;
   if(x > 3)
     sem_post(&condt3);
-  sem_post(&condt2);
+  sem_post(&excluMut);
   pthread_exit(NULL);
 }
 
 /* Thread C */
 void *C (void *t) {
-  if(x == 0)
   sem_wait(&condt2);
   printf("Sente-se por favor.\n");
+  sem_wait(&excluMut);
     x++;
   if(x > 3)
     sem_post(&condt3);
-  sem_post(&condt2);
+  sem_post(&excluMut);
   pthread_exit(NULL);
 }
 
 /* Thread D */
 void *D (void *t) {
-  if(x == 0)
   sem_wait(&condt2);
   printf("Aceita um copo d’agua?.\n");
+  sem_wait(&excluMut);
     x++;
   if(x > 3)
     sem_post(&condt3);
-  sem_post(&condt2);
+  sem_post(&excluMut);
   pthread_exit(NULL);
 }
 
 /* Thread E */
 void *E (void *t) {
-  if(x < 4)
   sem_wait(&condt3);
   printf("Volte sempre!.\n");
   pthread_exit(NULL);
@@ -72,6 +73,7 @@ int main(int argc, char *argv[]) {
   /* Inicilaiza os semaforos */
   sem_init(&condt2, 0, 0);
   sem_init(&condt3, 0, 0);
+  sem_init(&excluMut, 0, 1);
 
   /* Cria as threads */
   pthread_create(&threads[4], NULL, A, NULL);
