@@ -15,7 +15,6 @@ void *A (void *t) {
   /* faz alguma coisa pra gastar tempo... */
   boba1=10000; boba2=-10000; while (boba2 < boba1) boba2++;
   printf("Seja bem-vindo!\n");
-  x++;
   sem_post(&condt2);
   sem_post(&condt2);
   sem_post(&condt2);
@@ -28,7 +27,7 @@ void *B (void *t) {
   printf("Fique a vontade.\n");
   sem_wait(&excluMut);
   x++;
-  if(x > 3)
+  if(x == 3)
     sem_post(&condt3);
   sem_post(&excluMut);
   pthread_exit(NULL);
@@ -40,7 +39,7 @@ void *C (void *t) {
   printf("Sente-se por favor.\n");
   sem_wait(&excluMut);
     x++;
-  if(x > 3)
+  if(x == 3)
     sem_post(&condt3);
   sem_post(&excluMut);
   pthread_exit(NULL);
@@ -52,7 +51,7 @@ void *D (void *t) {
   printf("Aceita um copo d’agua?.\n");
   sem_wait(&excluMut);
     x++;
-  if(x > 3)
+  if(x == 3)
     sem_post(&condt3);
   sem_post(&excluMut);
   pthread_exit(NULL);
