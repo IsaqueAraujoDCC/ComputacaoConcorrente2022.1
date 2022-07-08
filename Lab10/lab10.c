@@ -23,9 +23,10 @@ void * leitor (void * arg) {
         printf("Leitora: %d verifica escrita!\n", *id); 
         sem_wait(&escr); 
     }
+    sem_post(&em_l);
     sem_post(&leit); 
     printf("Leitora %d esta lendo\n", *id); 
-     l--; 
+    sem_wait(&em_l); l--; 
     //printf("Leitora %d terminou de ler\n", *id);
     if(l == 0) {
         sem_post(&escr); 
@@ -50,9 +51,11 @@ void * escritor (void * arg) {
         //printf("Escritora: %d verifica leitura!\n", *id);
         sem_wait(&leit); 
     }
+    sem_post(&em_e);
     sem_wait(&escr);
     printf("Escritora %d esta escrevendo\n", *id);
     sem_post(&escr);
+    sem_wait(&em_e); 
     e--;
     //printf("Escritora %d terminou de escrever\n", *id);
     if(e == 0){ 
