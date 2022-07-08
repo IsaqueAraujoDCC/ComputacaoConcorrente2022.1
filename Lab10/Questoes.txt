@@ -1,0 +1,5 @@
+A - Os semáforos em_e e em_l são usados para exclusão mútua, assim precisão ser iniciados com valor 1. Caso contrário, a primeira thread a usar sem_wait pode não decrementar o seu valor e acabar ficando travada.
+
+Como não existe regra pra qual thread deve ser executada primeiro, os semáforos leit e escr devem começar com 1 também. Quem decide quem começará é o próprio sistema.
+
+B - Acredito que não.
