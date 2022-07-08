@@ -10,8 +10,7 @@
 
 sem_t em_e, em_l, escr, leit; //semaforos
 int e=0, l=0; //globais
-//    printf("Leitora %d esta lendo\n", *id);
-//    printf("Escritora %d esta escrevendo\n", *id);
+
 //thread leitora
 void * leitor (void * arg) {
   int *id = (int *) arg;
@@ -27,12 +26,11 @@ void * leitor (void * arg) {
     sem_post(&leit); 
     printf("Leitora %d esta lendo\n", *id); 
     sem_wait(&em_l); l--; 
-    //printf("Leitora %d terminou de ler\n", *id);
     if(l == 0) {
         sem_post(&escr); 
     }
-    printf("Leitora: %d terminou de ler!\n", *id);  
     sem_post(&em_l);
+    printf("Leitora: %d terminou de ler!\n", *id);  
     sleep(1);
   } 
   free(arg);
@@ -41,7 +39,7 @@ void * leitor (void * arg) {
 
 
 
-//thread leitora
+//thread escritora
 void * escritor (void * arg) {
   int *id = (int *) arg;
   while(1) {
@@ -57,12 +55,11 @@ void * escritor (void * arg) {
     sem_post(&escr);
     sem_wait(&em_e); 
     e--;
-    //printf("Escritora %d terminou de escrever\n", *id);
     if(e == 0){ 
         sem_post(&leit);
     }
-    printf("Escritora %d terminou de escrever\n", *id);
     sem_post(&em_e);
+    printf("Escritora %d terminou de escrever\n", *id);
     sleep(1);
   } 
   free(arg);
