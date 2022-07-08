@@ -37,8 +37,6 @@ void * leitor (void * arg) {
   pthread_exit(NULL);
 }
 
-
-
 //thread escritora
 void * escritor (void * arg) {
   int *id = (int *) arg;
