@@ -50,6 +50,7 @@ void * escritor (void * arg) {
     printf("Escritora %d quer escrever!\n", *id);
     sem_wait(&escr);
     printf("Escritora %d esta escrevendo\n", *id);
+    printf("Escritora %d terminou de escrever\n", *id);
     sem_post(&escr);
     sem_wait(&em_e); 
     e--;
@@ -57,7 +58,6 @@ void * escritor (void * arg) {
         sem_post(&leit);
     }
     sem_post(&em_e);
-    printf("Escritora %d terminou de escrever\n", *id);
     sleep(1);
   } 
   free(arg);
