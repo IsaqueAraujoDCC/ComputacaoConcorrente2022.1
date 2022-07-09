@@ -41,13 +41,13 @@ void * leitor (void * arg) {
 void * escritor (void * arg) {
   int *id = (int *) arg;
   while(1) {
-    printf("Escritora: %d quer escrever!\n", *id);
     sem_wait(&em_e); e++; 
     if(e == 1) {
         //printf("Escritora: %d verifica leitura!\n", *id);
         sem_wait(&leit); 
     }
     sem_post(&em_e);
+    printf("Escritora: %d quer escrever!\n", *id);
     sem_wait(&escr);
     printf("Escritora %d esta escrevendo\n", *id);
     sem_post(&escr);
