@@ -15,11 +15,11 @@ int e=0, l=0; //globais
 void * leitor (void * arg) {
   int *id = (int *) arg;
   while(1) {
-    printf("Leitora: %d quer ler!\n", *id); 
+    printf("Leitora %d quer ler!\n", *id); 
     sem_wait(&leit);  
     sem_wait(&em_l); l++;  
     if(l == 1) {
-        printf("Leitora: %d verifica escrita!\n", *id); 
+        printf("Leitora %d verifica escrita!\n", *id); 
         sem_wait(&escr); 
     }
     sem_post(&em_l);
@@ -30,7 +30,7 @@ void * leitor (void * arg) {
         sem_post(&escr); 
     }
     sem_post(&em_l);
-    printf("Leitora: %d terminou de ler!\n", *id);  
+    printf("Leitora %d terminou de ler!\n", *id);  
     sleep(1);
   } 
   free(arg);
@@ -47,7 +47,7 @@ void * escritor (void * arg) {
         sem_wait(&leit); 
     }
     sem_post(&em_e);
-    printf("Escritora: %d quer escrever!\n", *id);
+    printf("Escritora %d quer escrever!\n", *id);
     sem_wait(&escr);
     printf("Escritora %d esta escrevendo\n", *id);
     sem_post(&escr);
