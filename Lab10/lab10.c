@@ -93,7 +93,12 @@ int main(void) {
          printf("--ERRO: pthread_join() \n"); exit(-1); 
     } 
   }  
-
+  
+  sem_destroy(&em_e);
+  sem_destroy(&em_l);
+  sem_destroy(&escr);
+  sem_destroy(&leit);
+  
   pthread_exit(NULL);
   return 0;
 }
